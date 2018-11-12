@@ -826,10 +826,10 @@ public class MinioClient {
 
     HttpUrl.Builder urlBuilder = this.baseUrl.newBuilder();
     if (bucketName != null) {
-      checkBucketName(bucketName);
-
       String host = this.baseUrl.host();
       if (host.equals(S3_AMAZONAWS_COM)) {
+        checkBucketName(bucketName);
+
         // special case: handle s3.amazonaws.com separately
         if (region != null) {
           host = AwsS3Endpoints.INSTANCE.endpoint(region);
