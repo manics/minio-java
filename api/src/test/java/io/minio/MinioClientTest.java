@@ -62,6 +62,7 @@ import okio.Buffer;
 public class MinioClientTest {
   private static final String EXPECTED_EXCEPTION_DID_NOT_FIRE = "Expected exception did not fire";
   private static final String BUCKET = "bucket";
+  private static final String BUCKET_NON_AWS = "InVaLiD_AwS_BuCkEt_NaMe";
   private static final String CONTENT_LENGTH = "Content-Length";
   private static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
   private static final String APPLICATION_JAVASCRIPT = "application/javascript";
@@ -454,6 +455,24 @@ public class MinioClientTest {
 
     MinioClient client = new MinioClient(server.url(""));
     boolean result = client.bucketExists(BUCKET);
+
+    assertEquals(true, result);
+  }
+
+  @Test
+  public void testBucketNotAwsExists()
+          throws NoSuchAlgorithmException, InvalidKeyException, IOException, XmlPullParserException, MinioException {
+    MockWebServer server = new MockWebServer();
+    MockResponse response = new MockResponse();
+
+    response.addHeader("Date", SUN_29_JUN_2015_22_01_10_GMT);
+    response.setResponseCode(200);
+
+    server.enqueue(response);
+    server.start();
+
+    MinioClient client = new MinioClient(server.url(""));
+    boolean result = client.bucketExists(BUCKET_NON_AWS);
 
     assertEquals(true, result);
   }
